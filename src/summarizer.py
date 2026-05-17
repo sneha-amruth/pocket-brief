@@ -27,8 +27,8 @@ Tone: Informed friend summarizing the day, not a newscaster."""
 
 USER_PROMPT_TEMPLATE = """Here are today's raw stories fetched from news sources.
 
-POLITICS STORIES:
-{politics}
+GEOPOLITICS STORIES:
+{geopolitics}
 
 AI & TECH STORIES:
 {ai_tech}
@@ -39,9 +39,9 @@ WORTH KNOWING STORIES:
 Your tasks:
 1. Deduplicate — if multiple stories cover the same event, pick the best version
 2. Select the 2-3 most important stories of the day for TOP STORIES (any section)
-3. For POLITICS: pick the 3-4 most important political stories (India, US, geopolitics, economic policy)
+3. For GEOPOLITICS: pick the 3-4 most important stories (wars, diplomacy, India, global economics, policy)
 4. For AI & TECH: pick the 3-4 most important AI/tech stories (industry + developer blended)
-5. For WORTH KNOWING: pick 1-2 important stories that don't fit politics or AI
+5. For WORTH KNOWING: pick 1-2 surprising or important stories that don't fit the above
 
 For each story write:
 - headline: short, clear, factual
@@ -52,7 +52,7 @@ Return a JSON object in this exact format:
   "top_stories": [
     {{"headline": "...", "context": "..."}}
   ],
-  "politics": [
+  "geopolitics": [
     {{"headline": "...", "context": "..."}}
   ],
   "ai_tech": [
@@ -80,7 +80,7 @@ def summarize(raw: dict[str, list[dict]]) -> dict:
     client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
     prompt = USER_PROMPT_TEMPLATE.format(
-        politics=_format_stories_for_prompt(raw.get("politics", [])),
+        geopolitics=_format_stories_for_prompt(raw.get("geopolitics", [])),
         ai_tech=_format_stories_for_prompt(raw.get("ai_tech", [])),
         worth_knowing=_format_stories_for_prompt(raw.get("worth_knowing", [])),
     )

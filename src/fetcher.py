@@ -11,12 +11,12 @@ from datetime import datetime, timedelta, timezone
 # ─── Source config ────────────────────────────────────────────────────────────
 
 RSS_SOURCES = {
-    "politics": [
-        "https://feeds.bbci.co.uk/news/rss.xml",
-        "https://theprint.in/feed/",
+    "geopolitics": [
+        "https://feeds.bbci.co.uk/news/world/rss.xml",
+        "https://www.aljazeera.com/xml/rss/all.xml",
+        "https://www.thehindu.com/news/international/feeder/default.rss",
         "https://feeds.feedburner.com/ndtvnews-top-stories",
-        "https://www.thehindu.com/news/feeder/default.rss",
-        # TODO: add a working Reuters RSS URL — old feeds.reuters.com is deprecated
+        "https://theprint.in/feed/",
     ],
     "ai_tech": [
         "https://techcrunch.com/feed/",
@@ -34,9 +34,9 @@ RSS_SOURCES = {
 }
 
 REDDIT_SOURCES = {
-    "politics": ["worldnews", "india", "geopolitics", "economics"],
+    "geopolitics": ["geopolitics", "worldnews", "CredibleDefense", "india", "economics"],
     "ai_tech": ["MachineLearning", "artificial", "programming", "technology"],
-    "worth_knowing": ["worldnews"],
+    "worth_knowing": ["todayilearned", "science"],
 }
 
 
@@ -90,7 +90,7 @@ def deduplicate(stories: list[dict]) -> list[dict]:
 def fetch_all() -> dict[str, list[dict]]:
     """Fetch all sources, deduplicate within each section, and return raw stories."""
     results: dict[str, list[dict]] = {
-        "politics": [],
+        "geopolitics": [],
         "ai_tech": [],
         "worth_knowing": [],
     }

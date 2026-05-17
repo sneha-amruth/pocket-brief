@@ -24,7 +24,7 @@ def format_bulletin(bulletin: dict) -> str:
         lines.append("")
 
     add_section("📌", "TOP STORIES", bulletin.get("top_stories", []))
-    add_section("🏛️", "POLITICS", bulletin.get("politics", []))
+    add_section("🌍", "GEOPOLITICS", bulletin.get("geopolitics", []))
     add_section("🤖", "AI & TECH", bulletin.get("ai_tech", []))
     add_section("📎", "WORTH KNOWING", bulletin.get("worth_knowing", []))
 
