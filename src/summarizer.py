@@ -85,20 +85,28 @@ def summarize(raw: dict[str, list[dict]]) -> dict:
         worth_knowing=_format_stories_for_prompt(raw.get("worth_knowing", [])),
     )
 
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": prompt},
-        ],
-    )
-    content = response.choices[0].message.content.strip()
+    last_error = None
+    for attempt in range(1, 4):
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+        )
+        content = response.choices[0].message.content.strip()
 
-    # Strip markdown code fences if the model wraps the JSON
-    if content.startswith("```"):
-        content = content.split("```")[1]
-        if content.startswith("json"):
-            content = content[4:]
-        content = content.strip()
+        # Strip markdown code fences if the model wraps the JSON
+        if content.startswith("```"):
+            content = content.split("```")[1]
+            if content.startswith("json"):
+                content = content[4:]
+            content = content.strip()
 
-    return json.loads(content)
+        try:
+            return json.loads(content)
+        except json.JSONDecodeError as e:
+            print(f"[summarizer] JSON parse failed (attempt {attempt}/3): {e}")
+            last_error = e
+
+    raise last_error
